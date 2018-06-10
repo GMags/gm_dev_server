@@ -13,7 +13,13 @@ include_recipe "#{cb}::user"
 # Install Java, Apache, Ant, Python
 include_recipe 'java::default'
 
-%W{httpd ant python3.6}.each do |pkg|
+# yum_repository 'ius-release' do
+#   description "iuscommunity"
+#   baseurl "https://centos7.iuscommunity.org/ius-release.rpm"
+#   action [:create, :makecache]
+# end
+
+%W{httpd ant net-tools}.each do |pkg|
   package pkg do
     action :install
   end
@@ -21,4 +27,9 @@ end
 
 service 'httpd' do
   action [:enable, :start]
+end
+
+execute 'yum-makecache' do
+  command 'yum makecache'
+  action :run
 end
