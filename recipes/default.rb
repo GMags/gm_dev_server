@@ -10,26 +10,11 @@ cb = 'gm_dev_server'
 
 include_recipe "#{cb}::user"
 
-# Install Java, Apache, Ant, Python
+# Install Java
 include_recipe 'java::default'
 
-# yum_repository 'ius-release' do
-#   description "iuscommunity"
-#   baseurl "https://centos7.iuscommunity.org/ius-release.rpm"
-#   action [:create, :makecache]
-# end
+# Install apache
+include_recipe "#{cb}::apache"
 
-%W{httpd ant net-tools}.each do |pkg|
-  package pkg do
-    action :install
-  end
-end
-
-service 'httpd' do
-  action [:enable, :start]
-end
-
-execute 'yum-makecache' do
-  command 'yum makecache'
-  action :run
-end
+# Install dev tools
+include_recipe "#{cb}::dev_tools"
